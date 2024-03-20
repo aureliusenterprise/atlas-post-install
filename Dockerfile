@@ -1,5 +1,7 @@
 from python:3.11
 
+env NAMESPACE="demo"
+
 workdir /usr/src/app
 
 copy requirements.txt ./

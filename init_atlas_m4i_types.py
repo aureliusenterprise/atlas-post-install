@@ -11,15 +11,20 @@ from m4i_atlas_core import (
     get_keycloak_token,
 )
 
+NAMESPACE = os.getenv("NAMESPACE", "demo")
+
 store = ConfigStore.get_instance()
 
 store.load(
     {
-        "atlas.credentials.username": os.getenv("KEYCLOAK_ATLAS_USER_USERNAME"),
-        "atlas.credentials.password": os.getenv("KEYCLOAK_ATLAS_ADMIN_PASSWORD"),
-        # "atlas.server.url": os.getenv('ATLAS_EXTERNAL_URL') + "/api/atlas",
-        "atlas.server.url": os.getenv("ATLAS_EXTERNAL_URL"),
-        "keycloak.server.url": os.getenv("KEYCLOAK_SERVER_URL"),
+        "atlas.credentials.username": os.getenv("KEYCLOAK_ATLAS_USERNAME", "atlas"),
+        "atlas.credentials.password": os.getenv("KEYCLOAK_ATLAS_PASSWORD", "atlas"),
+        "atlas.server.url": os.getenv(
+            "ATLAS_URL", f"http://atlas.{NAMESPACE}.svc.cluster.local:21000/api/atlas"
+        ),
+        "keycloak.server.url": os.getenv(
+            "KEYCLOAK_URL", f"http://keycloak.{NAMESPACE}.svc.cluster.local:8080/auth/"
+        ),
         "keycloak.client.id": "m4i_public",
         "keycloak.realm.name": "m4i",
         "keycloak.client.secret.key": None,

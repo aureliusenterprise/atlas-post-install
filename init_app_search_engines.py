@@ -7,12 +7,15 @@ from requests.auth import HTTPBasicAuth
 
 from app_search_engine_setup import engines
 
+
+NAMESPACE = os.getenv("NAMESPACE", "demo")
+
 elastic_url = os.getenv(
-    "ELASTIC_URL", "https://aureliusdev.westeurope.cloudapp.azure.com/demo/elastic/"
+    "ELASTIC_URL", f"http://elastic-search-es-http.{NAMESPACE}.svc.cluster.local:9200/"
 )
 enterprise_search_url = os.getenv(
     "ENTERPRISE_SEARCH_EXTERNAL_URL",
-    "aureliusdev.westeurope.cloudapp.azure.com/demo/app-search/",
+    f"http://enterprise-search-ent-http.${NAMESPACE}.svc.cluster.local:3002/",
 )
 elastic_username = os.getenv("ELASTIC_USERNAME", "elastic")
 elastic_password = os.getenv("ELASTIC_PASSWORD", "elastic")
