@@ -2,6 +2,7 @@ import os
 
 import requests
 from elastic_enterprise_search import AppSearch
+from elastic_enterprise_search.exceptions import BadRequestError
 from elasticsearch import Elasticsearch
 from requests.auth import HTTPBasicAuth
 
@@ -14,8 +15,8 @@ elastic_url = os.getenv(
     "ELASTIC_URL", f"http://elastic-search-es-http.{NAMESPACE}.svc.cluster.local:9200/"
 )
 enterprise_search_url = os.getenv(
-    "ENTERPRISE_SEARCH_EXTERNAL_URL",
-    f"http://enterprise-search-ent-http.${NAMESPACE}.svc.cluster.local:3002/",
+    "ENTERPRISE_SEARCH_URL",
+    f"http://enterprise-search-ent-http.{NAMESPACE}.svc.cluster.local:3002/",
 )
 elastic_username = os.getenv("ELASTIC_USERNAME", "elastic")
 elastic_password = os.getenv("ELASTIC_PASSWORD", "elastic")
@@ -55,9 +56,30 @@ def put_index_template(elastic_client):
 
 def create_engines(app_search_client):
     for engine in engines:
-        app_search_client.create_engine(engine["name"])
-        app_search_client.put_schema(engine["name"], engine["schema"])
-        app_search_client.put_search_settings(engine["name"], engine["search-settings"])
+        try:
+            app_search_client.create_engine(engine_name=engine["name"])
+            app_search_client.put_schema(
+                engine_name=engine["name"], schema=engine["schema"]
+            )
+            app_search_client.put_search_settings(
+                engine_name=engine["name"],
+                search_fields=engine["search-settings"]["search_fields"],
+                result_fields=engine["search-settings"]["result_fields"],
+            )
+        except BadRequestError as e:
+            if e.body["errors"] == ["Name is already taken"]:
+                print(f'Skipping creation of {engine["name"]}. Engine already exists.')
+            else:
+                raise e
+        finally:
+            app_search_client.put_schema(
+                engine_name=engine["name"], schema=engine["schema"]
+            )
+            app_search_client.put_search_settings(
+                engine_name=engine["name"],
+                search_fields=engine["search-settings"]["search_fields"],
+                result_fields=engine["search-settings"]["result_fields"],
+            )
 
 
 def main():
