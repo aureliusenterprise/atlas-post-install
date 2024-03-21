@@ -1,5 +1,5 @@
 import os
-
+import logging
 import requests
 from elastic_enterprise_search import AppSearch
 from elastic_enterprise_search.exceptions import BadRequestError
@@ -68,7 +68,9 @@ def create_engines(app_search_client):
             )
         except BadRequestError as e:
             if e.body["errors"] == ["Name is already taken"]:
-                print(f'Skipping creation of {engine["name"]}. Engine already exists.')
+                logging.warning(
+                    f'Skipping creation of {engine["name"]}. Engine already exists.'
+                )
             else:
                 raise e
         finally:

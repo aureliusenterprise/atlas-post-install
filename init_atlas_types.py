@@ -1,0 +1,1 @@
+flink-ci/scripts/init_atlas_types.py

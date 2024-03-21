@@ -1,0 +1,3 @@
+[submodule "flink-ci"]
+	path = flink-ci
+	url = git@github.com:aureliusenterprise/flink-ci.git
