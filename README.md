@@ -1,5 +1,5 @@
 # atlas-post-install
-Container image for automating post-installation steps in Aurelius Atlas
+Container image for automating post-installation steps in Aurelius Atlas.
 
 ## Environment variables
 To configure the job you have to specify the following environment variables:
