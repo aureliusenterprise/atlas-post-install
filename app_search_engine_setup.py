@@ -7,6 +7,7 @@ engines = [
                    'dqscore_accuracy': 'number', 'dqscore_timeliness': 'number', 'dqscoresum_accuracy': 'number',
                    'dqscore_validity': 'number', 'derivedsystem': 'text', 'qualityguid_timeliness': 'text',
                    'deriveddomainleadguid': 'text', 'deriveddataset': 'text', 'derivedsystemguid': 'text',
+                   'derivedprocess': 'text', 'derivedprocessguid': 'text',
                    'dqscoresum_completeness': 'number', 'dqscore_uniqueness': 'number',
                    'dqscorecnt_completeness': 'number',
                    'dqscoresum_uniqueness': 'number', 'breadcrumbname': 'text', 'breadcrumbguid': 'text',
@@ -35,7 +36,8 @@ engines = [
                                               'guid': {'weight': 1}, 'definition': {'weight': 1},
                                               'email': {'weight': 1}, 'derivedcollection': {'weight': 1},
                                               'deriveddatadomain': {'weight': 1}, 'typename': {'weight': 1},
-                                              'id': {'weight': 1},'typealias': {'weight': 1}},
+                                              'id': {'weight': 1}, 'typealias': {'weight': 1},
+                                              'derivedprocess': {'weight': 1}},
                             'result_fields': {'deriveddataentity': {'raw': {}}, 'derivedsystem': {'raw': {}},
                                               'deriveddataset': {'raw': {}},
                                               'name': {'snippet': {'size': 150, 'fallback': True}, 'raw': {}},
@@ -44,6 +46,7 @@ engines = [
                                               'typealias': {'raw': {}},
                                               'definition': {'snippet': {'size': 200, 'fallback': True}, 'raw': {}},
                                               'derivedcollection': {'raw': {}}, 'deriveddatadomain': {'raw': {}},
+                                              'derivedprocess': {'raw': {}},
                                               'typename': {'raw': {}}}, 'boosts': {}, 'precision': 2}
     },
     {
