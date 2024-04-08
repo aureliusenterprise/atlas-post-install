@@ -36,8 +36,8 @@ def get_enterprise_api_private_key(
 
 def put_index_template(elastic_client):
     elastic_client.indices.put_index_template(
-        name="atlas-dev-template",
-        index_patterns=[".ent-search-engine-documents-atlas-dev"],
+        name="publish-state-template",
+        index_patterns=["publish_state"],
         priority=1,
         template=publish_state_template,
     )
