@@ -3,9 +3,11 @@ import logging
 import requests
 from elastic_enterprise_search import AppSearch
 from elastic_enterprise_search.exceptions import BadRequestError
+from elasticsearch import Elasticsearch
 from requests.auth import HTTPBasicAuth
 
 from app_search_engine_setup import engines
+from index_template import publish_state_template
 
 
 NAMESPACE = os.getenv("NAMESPACE", "demo")
@@ -30,6 +32,15 @@ def get_enterprise_api_private_key(
     )
     key_info = key_response.json()
     return key_info["key"]
+
+
+def put_index_template(elastic_client):
+    elastic_client.indices.put_index_template(
+        name="atlas-dev-template",
+        index_patterns=[".ent-search-engine-documents-atlas-dev"],
+        priority=1,
+        template=publish_state_template,
+    )
 
 
 def create_engines(app_search_client):
@@ -63,6 +74,12 @@ def create_engines(app_search_client):
 
 
 def main():
+    elastic_client = Elasticsearch(
+        hosts=[elastic_url], basic_auth=(elastic_username, elastic_password)
+    )
+
+    put_index_template(elastic_client)
+
     app_search_api_key = get_enterprise_api_private_key(
         enterprise_search_url, elastic_username, elastic_password
     )
