@@ -15,6 +15,6 @@ copy *.py ./
 
 copy *.sh ./
 
-copy data/ ./data/
+copy data/*.zip ./data/
 
 cmd ["./run.sh"]
