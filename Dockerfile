@@ -1,15 +1,15 @@
-from python:3.11
+from aureliusatlas/docker-flink:2.1.45
 
-env NAMESPACE="demo"
+user root
 
-run apt update
-run apt install -y jq curl
+run apt-get update
+run apt-get install -y jq curl
 
-workdir /usr/src/app
+user flink
 
 copy requirements.txt ./
 
-run pip install --no-cache-dir -r requirements.txt
+run python -m pip install --no-cache-dir -r requirements.txt
 
 copy *.py ./
 
