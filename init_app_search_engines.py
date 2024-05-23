@@ -21,7 +21,7 @@ enterprise_search_url = os.getenv(
 )
 elastic_username = os.getenv("ELASTIC_USERNAME", "elastic")
 elastic_password = os.getenv("ELASTIC_PASSWORD", "elastic")
-elastic_certificate_path = os.getenv("ELASTIC_CERTIFICATE_PATH", "")
+elastic_certificate_path = os.getenv("ELASTIC_CERTIFICATE_PATH", None)
 
 
 def get_enterprise_api_private_key(
