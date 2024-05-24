@@ -21,6 +21,7 @@ enterprise_search_url = os.getenv(
 )
 elastic_username = os.getenv("ELASTIC_USERNAME", "elastic")
 elastic_password = os.getenv("ELASTIC_PASSWORD", "elastic")
+elastic_certificate_path = os.getenv("ELASTIC_CERTIFICATE_PATH", None)
 
 
 def get_enterprise_api_private_key(
@@ -75,7 +76,7 @@ def create_engines(app_search_client):
 
 def main():
     elastic_client = Elasticsearch(
-        hosts=[elastic_url], basic_auth=(elastic_username, elastic_password)
+        hosts=[elastic_url], basic_auth=(elastic_username, elastic_password), ca_certs=elastic_certificate_path
     )
 
     put_index_template(elastic_client)

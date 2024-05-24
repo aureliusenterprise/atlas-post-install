@@ -11,5 +11,6 @@ To configure the job you have to specify the following environment variables:
 | ENTERPRISE_SEARCH_URL | base url of the enterprise search | yes |
 | ELASTIC_USERNAME | elastic username for authentication | no (default: `elastic`) |
 | ELASTIC_PASSWORD | elastic password for authentication | yes |
+| ELASTIC_CERTIFICATE_PATH | elastic certificate path for authentication | no |
 
 Additionally, all the variables mentioned in [flink-ci README](https://github.com/aureliusenterprise/flink-ci/blob/f/separate_jobs/README.md#configuration).
