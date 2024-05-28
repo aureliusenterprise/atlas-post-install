@@ -53,13 +53,13 @@ def get_all_documents(
     return documents
 
 
-def put_all_documents(
+def index_all_documents(
     app_search_client: AppSearch,
     engine_name: str,
     documents: List[Mapping[str, Any]],
 ):
     for i in range(0, len(documents), 100):
-        app_search_client.put_documents(
+        app_search_client.index_documents(
             engine_name=engine_name, documents=documents[i : i + 100]
         )
 
@@ -104,7 +104,7 @@ def main() -> None:
     qualified_name_index = index_by_qualified_name(entities)
     documents = update_types_in_documents(documents)
     substitute_quality_guid(documents, qualified_name_index)
-    put_all_documents(
+    index_all_documents(
         app_search_client=app_search_client,
         engine_name=engine_name,
         documents=list[Mapping[str, Any]](documents),

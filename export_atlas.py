@@ -11,7 +11,7 @@ def parse_args():
     parser.add_argument(
         "--base-url",
         "-u",
-        default="https://aureliusdev.westeurope.cloudapp.azure.com/demo/atlas2/",
+        default="https://aureliusdev.westeurope.cloudapp.azure.com/demo/atlas2/api/atlas",
         help="Apache Atlas base url",
         type=URL,
     )
@@ -63,12 +63,13 @@ def import_data(base_url, export_output, base_headers):
     url = base_url / "admin/import"
     files = {"data": open(export_output, "rb")}
 
-    requests.post(url.as_uri(), files=files, headers=headers)
+    response = requests.post(url.as_uri(), files=files, headers=headers)
+    print(str(response.content))
 
 
 def main():
     args = parse_args()
-    base_url = args.base_url / "api/atlas"
+    base_url = args.base_url
     headers = {"Authorization": f"Bearer {args.token}"}
     if args.import_data:
         print("Importing entities")

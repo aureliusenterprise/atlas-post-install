@@ -2,6 +2,7 @@ import json
 import os
 import logging
 from pathlib import Path
+from elastic_transport.client_utils import DefaultType
 import requests
 from elastic_enterprise_search import AppSearch
 from elastic_enterprise_search.exceptions import BadRequestError
@@ -10,7 +11,7 @@ from requests.auth import HTTPBasicAuth
 
 from app_search_engine_setup import engines
 from index_template import publish_state_template
-from update_gov_index import put_all_documents
+from update_gov_index import index_all_documents
 
 
 NAMESPACE = os.getenv("NAMESPACE", "demo")
@@ -24,7 +25,7 @@ enterprise_search_url = os.getenv(
 )
 elastic_username = os.getenv("ELASTIC_USERNAME", "elastic")
 elastic_password = os.getenv("ELASTIC_PASSWORD", "elastic")
-elastic_certificate_path = os.getenv("ELASTIC_CERTIFICATE_PATH", "")
+elastic_certificate_path = os.getenv("ELASTIC_CERTIFICATE_PATH", DefaultType(0))
 
 UPLOAD_DATA = os.getenv("UPLOAD_DATA", False)
 
@@ -32,6 +33,7 @@ UPLOAD_DATA = os.getenv("UPLOAD_DATA", False)
 ENGINES_TO_UPLOAD = {
     "atlas-dev-quality": Path("data/atlas-dev-quality.json"),
     "atlas-dev-gov-quality": Path("data/atlas-dev-gov-quality.json"),
+    "atlas-dev": Path("data/atlas-dev.json"),
 }
 
 
@@ -85,11 +87,14 @@ def create_engines(app_search_client: AppSearch) -> None:
             )
 
 
-def upload_indices(app_search_client: AppSearch) -> None:
+def upload_documents(app_search_client: AppSearch, quality_only: bool = False) -> None:
     for engine_name, data_path in ENGINES_TO_UPLOAD.items():
+        if engine_name == "atlas-dev" and quality_only:
+            continue
+        print(f"Uploading {engine_name}")
         with open(data_path, "r") as json_file:
             documents = json.load(json_file)
-        put_all_documents(app_search_client, engine_name, documents)
+        index_all_documents(app_search_client, engine_name, documents)
 
 
 def main():
@@ -109,7 +114,9 @@ def main():
 
     create_engines(app_search_client)
     if UPLOAD_DATA == "true":
-        upload_indices(app_search_client)
+        upload_documents(app_search_client)
+    elif UPLOAD_DATA == "test-jobs":
+        upload_documents(app_search_client, quality_only=True)
 
 
 if __name__ == "__main__":
