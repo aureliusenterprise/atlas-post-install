@@ -154,6 +154,11 @@ def main():
         app_search_client=app_search_client,
         documents=list(atlas_dev_index.values()),
     )
+    index_all_documents(
+        engine_name="atlas-dev-quality",
+        app_search_client=app_search_client,
+        documents=quality_documents,
+    )
 
 
 if __name__ == "__main__":
