@@ -35,6 +35,18 @@ def index_documents(documents: list[MutableMapping[str, Any]]):
     return atlas_dev_index
 
 
+def zero_everything(atlas_dev_index: MutableMapping[str, Any]):
+    for document in atlas_dev_index.values():
+        for dimension in DIMENSIONS:
+            document[f"dqscoresum_{dimension}"] = 0.0
+            document[f"dqscorecnt_{dimension}"] = 0.0
+            document[f"dqscore_{dimension}"] = 0.0
+            document[f"qualityguid_{dimension}"] = []
+        document["dqscoresum_overall"] = 0.0
+        document["dqscorecnt_overall"] = 0.0
+        document["dqscore_overall"] = 0.0
+
+
 def update_quality_field(
     quality_document: MutableMapping[str, Any],
     entity_document: MutableMapping[str, Any],
@@ -145,6 +157,7 @@ def main():
     atlas_dev_documents = load_documents(Path("data/atlas-dev.json"))
     quality_documents = load_documents(Path("data/atlas-dev-quality.json"))
     atlas_dev_index = index_documents(atlas_dev_documents)
+    zero_everything(atlas_dev_index)
     update_quality_fields(quality_documents, atlas_dev_index)
     update_quality_attributes(atlas_dev_index)
     propagate_quality(atlas_dev_index)
