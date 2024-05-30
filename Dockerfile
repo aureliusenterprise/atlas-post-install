@@ -1,4 +1,4 @@
-from aureliusatlas/docker-flink:2.1.45
+from aureliusatlas/docker-flink:2.0.1
 
 user root
 
